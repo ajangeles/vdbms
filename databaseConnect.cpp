@@ -127,6 +127,10 @@ void insertVideo(MYSQL *connect){
 	}
 }
 
+void selectVideo(MYSQL *connect, char query[]){
+
+}
+
 void deleteVideo(MYSQL *connect, char query[]){
 	/*std::string query2 = query;
 	std::string video_name;
@@ -184,6 +188,48 @@ int main()
 		else if (strstr(query, "INSERT")){
 			if(mysql_query(connect, query) == 0){
 				insertVideo(connect);
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+		}
+		else if (strstr(query, "SELECT")){
+			if(mysql_query(connect, query) == 0){
+				MYSQL_RES *res; 
+				MYSQL_ROW row;
+				MYSQL_FIELD *field;
+
+				res = mysql_store_result(connect);
+				int num_fields = mysql_num_fields(res);
+
+				for(int i=0;field = mysql_fetch_field(res); i++) {
+					printf("%s\t", field->name);
+				}
+
+				printf("\n");
+
+				while ((row = mysql_fetch_row(res)))
+				{
+				   // Print all columns
+				   for(int i = 0; i < num_fields; i++)
+				   {
+					   // Make sure row[i] is valid!
+					   if(row[i] != NULL)
+						   printf("%s\t", row[i]);
+					   else
+							cout << "NULL" << endl;
+
+					   // Also, you can use ternary operator here instead of if-else
+					   // cout << row[i] ? row[i] : "NULL" << endl;
+				   }
+				}
+
+				printf("\n");
+
+				if(res != NULL)
+					mysql_free_result(res);
+
 			}
 			else{
 				printf(mysql_error(connect));
