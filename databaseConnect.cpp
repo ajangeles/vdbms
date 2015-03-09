@@ -97,29 +97,66 @@ void insertVideo(MYSQL *connect){
 
 	VideoCapture cap(video_path.append(video_name).append(".").append(video_ext)); 
 	if(!cap.isOpened()){
-		cout << "Error opening video stream or file" << endl;
+		mysql_query(connect, "DELETE FROM videos WHERE is_valid = 'N'");
 	}
-	bool stop(false);
+	else{
+		bool stop(false);
 
-	int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
-	int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
-	std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
-	VideoWriter video(path.append(video_name).append(".avi"),CV_FOURCC('M','J','P','G'),30, Size(frame_width,frame_height),true);
+		int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+		int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+		std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+		VideoWriter video(path.append(video_name).append(".avi"),CV_FOURCC('M','J','P','G'),30, Size(frame_width,frame_height),true);
 
-	int frameCount = 0;
-	int totalFrame = (int) cap.get(CV_CAP_PROP_FRAME_COUNT);
+		float frameCount = 0;
+		float totalFrame = (int) cap.get(CV_CAP_PROP_FRAME_COUNT);
 
-	while(frameCount<=totalFrame)
-	{
-		Mat image;
-		cap >> image;
-		video.write(image);
-		frameCount++;
+		while(frameCount<=totalFrame)
+		{
+			Mat image;
+			cap >> image;
+			video.write(image);
+			frameCount++;
+
+			std::cout << (int) /*(frameCount/totalFrame)*100*/ frameCount/totalFrame*100 << '%';
+			std::cout.flush(); // see wintermute's comment
+			std::cout << '\r';
+		}
+
+		cap.release();
+		mysql_query(connect, "UPDATE videos SET is_valid = 'Y' where is_valid = 'N'");
 	}
+}
 
-	cap.release();
-	printf("OWARI!");
-	mysql_query(connect, "UPDATE videos SET is_valid = 'Y' where is_valid = 'N'");
+void deleteVideo(MYSQL *connect, char query[]){
+	/*std::string query2 = query;
+	std::string video_name;
+
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	int num_fields;
+
+	query2.replace(query2.begin(), query2.end(),"SELECT *");
+	
+	res = mysql_store_result(connect);
+	num_fields = mysql_num_fields(res);
+	row = mysql_fetch_row(res);
+	video_name = row[0];
+	if(res != NULL)
+       mysql_free_result(res);
+
+	std::string sql = "UPDATE videos SET is_valid = 'N' where video_name = '";
+	mysql_query(connect, sql.append(video_name).append("'"));
+
+
+		
+		if (strstr(query, "videos")){
+			insertVideo(connect);
+			printf("INSERT SUCCESSFULY.");
+		}
+		else if (strstr(query, "videoclips")){
+			deleteVideo(connect, query);
+			printf("DELETE SUCCESSFULY.");	
+		}*/
 }
 
 int main()
@@ -138,23 +175,25 @@ int main()
 	char query[100];
 
 	while(query != "exit"){
+		printf("videodbms> ");
 		gets(query);
 
 		if(strstr(query, "DETECT")){
 			detectFaces();
 		}
-		else{
+		else if (strstr(query, "INSERT")){
 			if(mysql_query(connect, query) == 0){
-				if (strstr(query, "INSERT")){
-					insertVideo(connect);
-					printf("SUCCESS.");
-				}
+				insertVideo(connect);
 			}
 			else{
-				printf("FAIL.");
+				printf(mysql_error(connect));
+				printf("\n");
 			}
 		}
-		
+		/*else if (strstr(query, "DELETE")){
+			deleteVideo(connect, query);
+			printf("DELETE SUCCESSFULY.");
+		}*/
 	}
  
     mysql_close(connect);   
