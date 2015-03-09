@@ -62,6 +62,143 @@ void detectFaces(){
 	printf("DETECT!");
 }
 
+void playVideo(MYSQL *connect, char query[]){
+	string playQuery;
+	std::string que = query;
+	std::string video_name;
+	std::string video_ext;
+	int counter = 0;
+	char sql[100] = "";
+	MYSQL_RES *res; 
+	MYSQL_ROW row;
+	MYSQL_FIELD *field;
+	int num_fields;
+
+	if(strstr(query, "videos")){
+		playQuery = "play video from videos where video_name";
+
+		for(int i=0;i<playQuery.length();i++){
+			if(que[i] == playQuery[i]){
+				counter++;
+			}
+		}
+
+		if(counter == playQuery.length()){
+			que = query;
+
+			que.replace(0,10, "select video_name, video_ext");
+
+			for(int i=0;i<que.length();i++){
+				sql[i] = que[i];
+			}
+
+			if(mysql_query(connect, sql) == 0){
+				res = mysql_store_result(connect);
+				num_fields = mysql_num_fields(res);
+				row = mysql_fetch_row(res);
+				video_name = row[0];
+				video_ext = row[1];
+
+				if(res != NULL)
+				   mysql_free_result(res);
+
+				std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+				VideoCapture cap(path.append(video_name).append(".").append(video_ext));
+				if(!cap.isOpened()){
+					cout << "Error opening video stream or file" << endl;
+				}
+				bool stop(false);
+
+				while(!stop)
+				{
+					Mat image;
+					cap >> image;
+
+					imshow( "Face Detection", image );
+
+					if (waitKey(10) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
+					{
+						cout << "esc key is pressed by user" << endl;
+						break; 
+					}
+				}
+
+
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+
+		}
+		else{
+			printf("The PLAY statement template is: PLAY video FROM videos WHERE video_name = <video_name>\n");
+		}
+		
+	}
+	else if(strstr(query, "videoclips")){
+		playQuery = "play video from videoclips where videoclip_name";
+
+		for(int i=0;i<playQuery.length();i++){
+			if(que[i] == playQuery[i]){
+				counter++;
+			}
+		}
+
+		if(counter == playQuery.length()){
+			que = query;
+
+			que.replace(0,10, "select videoclip_name, videoclip_ext");
+
+			for(int i=0;i<que.length();i++){
+				sql[i] = que[i];
+			}
+
+			if(mysql_query(connect, sql) == 0){
+				res = mysql_store_result(connect);
+				num_fields = mysql_num_fields(res);
+				row = mysql_fetch_row(res);
+				video_name = row[0];
+				video_ext = row[1];
+
+				if(res != NULL)
+				   mysql_free_result(res);
+
+				std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+				VideoCapture cap(path.append(video_name).append(".").append(video_ext));
+				if(!cap.isOpened()){
+					cout << "Error opening video stream or file" << endl;
+				}
+				bool stop(false);
+
+				while(!stop)
+				{
+					Mat image;
+					cap >> image;
+
+					imshow( "Face Detection", image );
+
+					if (waitKey(10) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
+					{
+						cout << "esc key is pressed by user" << endl;
+						break; 
+					}
+				}
+
+
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+
+		}
+		else{
+			printf("The PLAY statement template is: PLAY video FROM videoclips WHERE videoclip_name = <videoclip_name>\n");
+		}
+	}
+}
+
 void insertVideo(MYSQL *connect){
 	std::string video_name;
 	std::string video_ext;
@@ -198,35 +335,126 @@ void updateVideo(MYSQL *connect, char query[]){
 }
 
 void deleteVideo(MYSQL *connect, char query[]){
-	/*std::string query2 = query;
+	std::string que = query;
 	std::string video_name;
-
+	std::string video_ext;
+	char que2[100] = "";
+	char sql2[100] = "";
+	char path2[100] = "";
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	int num_fields;
-
-	query2.replace(query2.begin(), query2.end(),"SELECT *");
-	
-	res = mysql_store_result(connect);
-	num_fields = mysql_num_fields(res);
-	row = mysql_fetch_row(res);
-	video_name = row[0];
-	if(res != NULL)
-       mysql_free_result(res);
-
-	std::string sql = "UPDATE videos SET is_valid = 'N' where video_name = '";
-	mysql_query(connect, sql.append(video_name).append("'"));
-
-
 		
-		if (strstr(query, "videos")){
-			insertVideo(connect);
-			printf("INSERT SUCCESSFULY.");
+	if (strstr(query, "videos")){
+		que.replace(0, 6, "SELECT video_name, video_ext");
+
+		for(int i=0;i<que.length();i++){
+			que2[i] = que[i];
 		}
-		else if (strstr(query, "videoclips")){
-			deleteVideo(connect, query);
-			printf("DELETE SUCCESSFULY.");	
-		}*/
+	
+		if(mysql_query(connect, que2) == 0){
+			res = mysql_store_result(connect);
+			num_fields = mysql_num_fields(res);
+			row = mysql_fetch_row(res);
+			video_name = row[0];
+			video_ext = row[1];
+
+			if(res != NULL)
+			   mysql_free_result(res);
+
+			std::string sql = "UPDATE videos SET is_valid = 'N' where video_name = '";
+			sql.append(video_name).append("'");
+
+			for(int i=0;i<sql.length();i++){
+				sql2[i] = sql[i];
+			}
+
+			if(mysql_query(connect, sql2) == 0){
+				std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+				path.append(video_name).append(".").append(video_ext);
+
+				for(int i=0;i<path.length();i++){
+					path2[i] = path[i];
+				}
+
+				if(remove(path2)!= 0){
+					perror("Error deleting file");
+				}
+				else{
+					puts("File successfully deleted");
+					if(mysql_query(connect, query) == 0){
+					}
+					else{
+						printf(mysql_error(connect));
+						printf("\n");
+					}
+				}
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+		}
+		else{
+			printf(mysql_error(connect));
+			printf("\n");
+		}
+	}
+	else if (strstr(query, "videoclips")){
+		que.replace(0, 6, "SELECT videoclip_name, videoclip_ext");
+
+		for(int i=0;i<que.length();i++){
+			que2[i] = que[i];
+		}
+	
+		if(mysql_query(connect, que2) == 0){
+			res = mysql_store_result(connect);
+			num_fields = mysql_num_fields(res);
+			row = mysql_fetch_row(res);
+			video_name = row[0];
+			video_ext = row[1];
+
+			if(res != NULL)
+			   mysql_free_result(res);
+
+			std::string sql = "UPDATE videoclips SET is_valid = 'N' where videoclip_name = '";
+			sql.append(video_name).append("'");
+
+			for(int i=0;i<sql.length();i++){
+				sql2[i] = sql[i];
+			}
+
+			if(mysql_query(connect, sql2) == 0){
+				std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+				path.append(video_name).append(".").append(video_ext);
+
+				for(int i=0;i<path.length();i++){
+					path2[i] = path[i];
+				}
+
+				if(remove(path2)!= 0){
+					perror("Error deleting file");
+				}
+				else{
+					puts("File successfully deleted");
+					if(mysql_query(connect, query) == 0){
+					}
+					else{
+						printf(mysql_error(connect));
+						printf("\n");
+					}
+				}
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+		}
+		else{
+			printf(mysql_error(connect));
+			printf("\n");
+		}
+	}
 }
 
 int main()
@@ -248,10 +476,17 @@ int main()
 		printf("videodbms> ");
 		gets(query);
 
-		if(strstr(query, "DETECT")){
+		for(int i = 0; i < sizeof(query); i++){
+		  query[i] = tolower(query[i]);
+		}
+
+		if(strstr(query, "detect")){
 			detectFaces();
 		}
-		else if (strstr(query, "INSERT")){
+		else if (strstr(query, "play")){
+			playVideo(connect, query);
+		}
+		else if (strstr(query, "insert")){
 			if(mysql_query(connect, query) == 0){
 				insertVideo(connect);
 			}
@@ -260,7 +495,7 @@ int main()
 				printf("\n");
 			}
 		}
-		else if (strstr(query, "SELECT")){
+		else if (strstr(query, "select")){
 			if(mysql_query(connect, query) == 0){
 				selectVideo(connect, query);
 			}
@@ -269,13 +504,15 @@ int main()
 				printf("\n");
 			}
 		}
-		else if (strstr(query, "UPDATE")){
+		else if (strstr(query, "update")){
 			updateVideo(connect, query);
 		}
-		/*else if (strstr(query, "DELETE")){
+		else if (strstr(query, "delete")){
 			deleteVideo(connect, query);
-			printf("DELETE SUCCESSFULY.");
-		}*/
+		}
+		else{
+			printf("Invalid query");
+		}
 	}
  
     mysql_close(connect);   
