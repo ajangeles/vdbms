@@ -119,6 +119,7 @@ void playVideo(MYSQL *connect, char query[]){
 					if (waitKey(10) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
 					{
 						cout << "esc key is pressed by user" << endl;
+						destroyWindow("Face Detection");
 						break; 
 					}
 				}
@@ -132,7 +133,8 @@ void playVideo(MYSQL *connect, char query[]){
 
 		}
 		else{
-			printf("The PLAY statement template is: PLAY video FROM videos WHERE video_name = <video_name>\n");
+			printf("Statement error\n");
+			printf("The PLAY statement template is: PLAY video FROM <videos/videoclips> WHERE <video_name/videoclip_name> = <video_name/videoclip_name>\n");
 		}
 		
 	}
@@ -194,7 +196,8 @@ void playVideo(MYSQL *connect, char query[]){
 
 		}
 		else{
-			printf("The PLAY statement template is: PLAY video FROM videoclips WHERE videoclip_name = <videoclip_name>\n");
+			printf("Statement error\n");
+			printf("The PLAY statement template is: PLAY video FROM <videos/videoclips> WHERE <video_name/videoclip_name> = <video_name/videoclip_name>\n");
 		}
 	}
 }
@@ -308,7 +311,7 @@ void updateVideo(MYSQL *connect, char query[]){
 
 	if(strstr(query, "videos")){
 		if(strstr(query, "video_id") || strstr(query, "video_ext") || strstr(query, "video_path") || strstr(query, "date_added") || strstr(query, "is_valid")){
-			printf("The UPDATE statement template is: UPDATE videos SET video_name = <new_name> WHERE video_name = <old_name>\n");
+			printf("The UPDATE statement template is: UPDATE <videos/videoclips> SET <video_name/videoclip_name> = <new_name> WHERE <video_name/videoclip_name = <old_name>\n");
 		}
 		else if(strstr(query, "video_name") && count == 10){
 			if(mysql_query(connect, query) == 0){
@@ -321,7 +324,7 @@ void updateVideo(MYSQL *connect, char query[]){
 	}
 	else if(strstr(query, "videoclips")){
 		if(strstr(query, "videoclip_id") || strstr(query, "videoclip_ext") || strstr(query, "videoclip_path") || strstr(query, "video_id") || strstr(query, "date_added") || strstr(query, "is_valid")){
-			printf("The UPDATE statement template is: UPDATE videoclips SET videoclip_name = <new_name> WHERE videoclip_name = <old_name>\n");
+			printf("The UPDATE statement template is: UPDATE <videos/videoclips> SET <video_name/videoclip_name> = <new_name> WHERE <video_name/videoclip_name = <old_name>\n");
 		}
 		else if(strstr(query, "videoclip_name") && count == 10){
 			if(mysql_query(connect, query) == 0){
