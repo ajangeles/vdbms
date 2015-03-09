@@ -128,7 +128,73 @@ void insertVideo(MYSQL *connect){
 }
 
 void selectVideo(MYSQL *connect, char query[]){
+	MYSQL_RES *res; 
+	MYSQL_ROW row;
+	MYSQL_FIELD *field;
 
+	res = mysql_store_result(connect);
+	int num_fields = mysql_num_fields(res);
+
+	for(int i=0;field = mysql_fetch_field(res); i++) {
+		printf("%s\t", field->name);
+	}
+
+	printf("\n");
+
+	while ((row = mysql_fetch_row(res)))
+	{
+	   for(int i = 0; i < num_fields; i++)
+	   {
+			  if(row[i] != NULL)
+			   printf("%s\t", row[i]);
+		   else
+				cout << "NULL" << endl;
+	   }
+	}
+
+	printf("\n");
+
+	if(res != NULL)
+		mysql_free_result(res);
+}
+
+void updateVideo(MYSQL *connect, char query[]){
+	int count = 0;
+
+	for(int i=0; i<strlen(query); i++){
+		if(query[i] == ' '){
+			 count++;
+		 }
+	}
+
+	count++;
+
+	if(strstr(query, "videos")){
+		if(strstr(query, "video_id") || strstr(query, "video_ext") || strstr(query, "video_path") || strstr(query, "date_added") || strstr(query, "is_valid")){
+			printf("The UPDATE statement template is: UPDATE videos SET video_name = <new_name> WHERE video_name = <old_name>\n");
+		}
+		else if(strstr(query, "video_name") && count == 10){
+			if(mysql_query(connect, query) == 0){
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+		}
+	}
+	else if(strstr(query, "videoclips")){
+		if(strstr(query, "videoclip_id") || strstr(query, "videoclip_ext") || strstr(query, "videoclip_path") || strstr(query, "video_id") || strstr(query, "date_added") || strstr(query, "is_valid")){
+			printf("The UPDATE statement template is: UPDATE videoclips SET videoclip_name = <new_name> WHERE videoclip_name = <old_name>\n");
+		}
+		else if(strstr(query, "videoclip_name") && count == 10){
+			if(mysql_query(connect, query) == 0){
+			}
+			else{
+				printf(mysql_error(connect));
+				printf("\n");
+			}
+		}
+	}
 }
 
 void deleteVideo(MYSQL *connect, char query[]){
@@ -196,40 +262,7 @@ int main()
 		}
 		else if (strstr(query, "SELECT")){
 			if(mysql_query(connect, query) == 0){
-				MYSQL_RES *res; 
-				MYSQL_ROW row;
-				MYSQL_FIELD *field;
-
-				res = mysql_store_result(connect);
-				int num_fields = mysql_num_fields(res);
-
-				for(int i=0;field = mysql_fetch_field(res); i++) {
-					printf("%s\t", field->name);
-				}
-
-				printf("\n");
-
-				while ((row = mysql_fetch_row(res)))
-				{
-				   // Print all columns
-				   for(int i = 0; i < num_fields; i++)
-				   {
-					   // Make sure row[i] is valid!
-					   if(row[i] != NULL)
-						   printf("%s\t", row[i]);
-					   else
-							cout << "NULL" << endl;
-
-					   // Also, you can use ternary operator here instead of if-else
-					   // cout << row[i] ? row[i] : "NULL" << endl;
-				   }
-				}
-
-				printf("\n");
-
-				if(res != NULL)
-					mysql_free_result(res);
-
+				selectVideo(connect, query);
 			}
 			else{
 				printf(mysql_error(connect));
@@ -237,44 +270,7 @@ int main()
 			}
 		}
 		else if (strstr(query, "UPDATE")){
-			int count = 0;
-
-			for(int i=0; i<strlen(query); i++){
-				 if(query[i] == ' '){
-					 count++;
-				 }
-			}
-
-			count++;
-
-			if(strstr(query, "videos")){
-				if(strstr(query, "video_id") || strstr(query, "video_ext") || strstr(query, "video_path") || strstr(query, "date_added") || strstr(query, "is_valid")){
-					printf("The UPDATE statement template is: UPDATE videos SET video_name = <new_name> WHERE video_name = <old_name>\n");
-				}
-				else if(strstr(query, "video_name") && count == 10){
-					if(mysql_query(connect, query) == 0){
-					}
-					else{
-						printf(mysql_error(connect));
-						printf("\n");
-					}
-				}
-			}
-			else if(strstr(query, "videoclips")){
-				if(strstr(query, "videoclip_id") || strstr(query, "videoclip_ext") || strstr(query, "videoclip_path") || strstr(query, "video_id") || strstr(query, "date_added") || strstr(query, "is_valid")){
-					printf("The UPDATE statement template is: UPDATE videoclips SET videoclip_name = <new_name> WHERE videoclip_name = <old_name>\n");
-				}
-				else if(strstr(query, "videoclip_name") && count == 10){
-					if(mysql_query(connect, query) == 0){
-					}
-					else{
-						printf(mysql_error(connect));
-						printf("\n");
-					}
-				}
-			}
-
-			
+			updateVideo(connect, query);
 		}
 		/*else if (strstr(query, "DELETE")){
 			deleteVideo(connect, query);
