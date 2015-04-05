@@ -13,7 +13,7 @@ void playVideo(MYSQL *connect, char query[]){
 	if(strstr(query, "videos")){
 		playQuery = "play video from videos where video_name";
 
-		for(int i=0;i<playQuery.length();i++){
+		for(int i=0;i<que.length();i++){
 			if(que[i] == playQuery[i]){
 				counter++;
 			}
@@ -77,7 +77,7 @@ void playVideo(MYSQL *connect, char query[]){
 	else if(strstr(query, "videoclips")){
 		playQuery = "play video from videoclips where videoclip_name";
 
-		for(int i=0;i<playQuery.length();i++){
+		for(int i=0;i<que.length();i++){
 			if(que[i] == playQuery[i]){
 				counter++;
 			}

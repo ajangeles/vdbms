@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <string.h>
 #include <iostream>
+#include <iomanip>
 
 using namespace cv;
 using namespace std;
@@ -48,7 +49,7 @@ int main()
 		}
 
 		if(strstr(query, "detect")){
-			detectFaces();
+			detectFaces(connect, query);
 		}
 		else if (strstr(query, "play")){
 			playVideo(connect, query);
@@ -78,7 +79,7 @@ int main()
 			deleteVideo(connect, query);
 		}
 		else{
-			printf("Invalid query");
+			printf("Invalid query\n");
 		}
 	}
  
