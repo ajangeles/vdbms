@@ -38,7 +38,7 @@ int main()
  
     connect=mysql_real_connect(connect,SERVER,USER,PASSWORD,DATABASE,0,NULL,0);
 
-	char query[100];
+	char query[1000];
 
 	while(query != "exit"){
 		printf("videodbms> ");
@@ -55,12 +55,14 @@ int main()
 			playVideo(connect, query);
 		}
 		else if (strstr(query, "insert")){
-			if(mysql_query(connect, query) == 0){
-				insertVideo(connect);
-			}
-			else{
-				printf(mysql_error(connect));
-				printf("\n");
+			if(strstr(query, "videos")){
+				if(mysql_query(connect, query) == 0){
+					insertVideo(connect);
+				}
+				else{
+					printf(mysql_error(connect));
+					printf("\n");
+				}
 			}
 		}
 		else if (strstr(query, "select")){
