@@ -74,7 +74,7 @@ int main()
 				printf("\n");
 			}
 		}
-		else if (strstr(query, "edit")){
+		else if (strstr(query, "update")){
 			editVideo(connect, query);
 		}
 		else if (strstr(query, "delete")){
