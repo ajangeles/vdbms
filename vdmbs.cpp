@@ -39,23 +39,27 @@ int main()
     connect=mysql_real_connect(connect,SERVER,USER,PASSWORD,DATABASE,0,NULL,0);
 
 	char query[1000];
+	char lowQuery[1000];
 
 	while(query != "exit"){
 		printf("videodbms> ");
 		gets(query);
 
 		for(int i = 0; i < sizeof(query); i++){
-		  query[i] = tolower(query[i]);
+		  if(query[i] == '\\'){
+			query[i] = '/';
+		  }
+		  lowQuery[i] = tolower(query[i]);
 		}
-
-		if(strstr(query, "detect")){
+		
+		if(strstr(lowQuery, "detect")){
 			detectFaces(connect, query);
 		}
-		else if (strstr(query, "play")){
+		else if (strstr(lowQuery, "play")){
 			playVideo(connect, query);
 		}
-		else if (strstr(query, "insert")){
-			if(strstr(query, "videos")){
+		else if (strstr(lowQuery, "insert")){
+			if(strstr(lowQuery, "videos")){
 				if(mysql_query(connect, query) == 0){
 					insertVideo(connect);
 				}
@@ -65,7 +69,7 @@ int main()
 				}
 			}
 		}
-		else if (strstr(query, "select")){
+		else if (strstr(lowQuery, "select")){
 			if(mysql_query(connect, query) == 0){
 				selectVideo(connect, query);
 			}
@@ -74,10 +78,10 @@ int main()
 				printf("\n");
 			}
 		}
-		else if (strstr(query, "update")){
+		else if (strstr(lowQuery, "update")){
 			editVideo(connect, query);
 		}
-		else if (strstr(query, "delete")){
+		else if (strstr(lowQuery, "delete")){
 			deleteVideo(connect, query);
 		}
 		else{

@@ -9,18 +9,11 @@ void playVideo(MYSQL *connect, char query[]){
 	MYSQL_ROW row;
 	MYSQL_FIELD *field;
 	int num_fields;
+	int key;
 
 	if(strstr(query, "videos")){
-		playQuery = "play video from videos where video_name";
-
-		for(int i=0;i<que.length();i++){
-			if(que[i] == playQuery[i]){
-				counter++;
-			}
-		}
-
-		if(counter == playQuery.length()){
-			que = query;
+		if(strstr(query, "play video from videos where video_name")){
+			/*que = query;
 
 			que.replace(0,10, "select video_name, video_ext");
 
@@ -34,8 +27,10 @@ void playVideo(MYSQL *connect, char query[]){
 				row = mysql_fetch_row(res);
 				video_name = row[0];
 				video_ext = row[1];
-
-				if(res != NULL)
+	
+				cout << video_name;
+				cout << video_ext;
+				/*if(res != NULL)
 				   mysql_free_result(res);
 
 				std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
@@ -52,25 +47,23 @@ void playVideo(MYSQL *connect, char query[]){
 
 					imshow( "Face Detection", image );
 
-					if (waitKey(10) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
-					{
-						cout << "esc key is pressed by user" << endl;
-						destroyWindow("Face Detection");
-						break; 
+					if(kbhit()){
+						key = getch();
+						if(key == 27){
+							destroyWindow("Face Detection");
+							break;	 
+						}
 					}
 				}
-
 
 			}
 			else{
 				printf(mysql_error(connect));
 				printf("\n");
-			}
-
+			}*/
 		}
 		else{
-			printf("Statement error\n");
-			printf("The PLAY statement template is: PLAY video FROM <videos/videoclips> WHERE <video_name/videoclip_name> = <video_name/videoclip_name>\n");
+			printf("Invalid query.\n");
 		}
 		
 	}

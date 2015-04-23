@@ -86,7 +86,8 @@ void detectFaces(MYSQL *connect, char query[]){
 				std::cout << '\r';
 
 				std::vector<Rect> faces;
-				face_cascade.detectMultiScale( image, faces, 1.1, 6, CV_HAAR_DO_CANNY_PRUNING, Size(30, 30) );
+				//face_cascade.detectMultiScale( image, faces, 1.1, 6, CV_HAAR_DO_CANNY_PRUNING, Size(30, 30) );
+				face_cascade.detectMultiScale( image, faces, 1.1, 2, 0| CV_HAAR_SCALE_IMAGE, Size(30, 30) );
 		
 				for( int i = 0; i < faces.size(); i++ )
 				{

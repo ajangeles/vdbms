@@ -8,6 +8,7 @@ void deleteVideo(MYSQL *connect, char query[]){
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	int num_fields;
+	int num_rows;
 		
 	if (strstr(query, "videos")){
 		que.replace(0, 6, "SELECT video_name, video_ext");
@@ -19,53 +20,56 @@ void deleteVideo(MYSQL *connect, char query[]){
 		if(mysql_query(connect, que2) == 0){
 			res = mysql_store_result(connect);
 			num_fields = mysql_num_fields(res);
-			row = mysql_fetch_row(res);
-			video_name = row[0];
-			video_ext = row[1];
+			num_rows = mysql_num_rows(res);
 
-			if(res != NULL)
-			   mysql_free_result(res);
+			for(int i=0;i<num_rows;i++){
+				row = mysql_fetch_row(res);
+				video_name = row[0];
+				video_ext = row[1];
 
-			std::string sql = "UPDATE videos SET is_valid = 'N' where video_name = '";
-			sql.append(video_name).append("'");
+				std::string sql = "UPDATE videos SET is_valid = 'N' where video_name = '";
+				sql.append(video_name).append("'");
 
-			for(int i=0;i<sql.length();i++){
-				sql2[i] = sql[i];
-			}
-
-			if(mysql_query(connect, sql2) == 0){
-				std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
-				path.append(video_name).append(".").append(video_ext);
-
-				for(int i=0;i<path.length();i++){
-					path2[i] = path[i];
+				for(int i=0;i<sql.length();i++){
+					sql2[i] = sql[i];
 				}
 
-				if(remove(path2)!= 0){
-					perror("Error deleting file");
-				}
-				else{
-					puts("File successfully deleted");
-					if(mysql_query(connect, query) == 0){
+				if(mysql_query(connect, sql2) == 0){
+					std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+					path.append(video_name).append(".").append(video_ext);
+
+					for(int i=0;i<path.length();i++){
+						path2[i] = path[i];
+					}
+
+					if(remove(path2)!= 0){
+						perror("Error deleting file");
 					}
 					else{
-						printf(mysql_error(connect));
-						printf("\n");
+						cout << video_name << "." << video_ext << " successfully deleted.\n";
+						if(mysql_query(connect, query) == 0){
+						}
+						else{
+							printf(mysql_error(connect));
+							printf("\n");
+						}
 					}
 				}
-			}
-			else{
-				printf(mysql_error(connect));
-				printf("\n");
+				else{
+					printf(mysql_error(connect));
+					printf("\n");
+				}
 			}
 		}
 		else{
 			printf(mysql_error(connect));
 			printf("\n");
 		}
+		if(res != NULL)
+			mysql_free_result(res);
 	}
 	else if (strstr(query, "videoclips")){
-		que.replace(0, 6, "SELECT videoclip_name, videoclip_ext");
+		que.replace(0, 6, "SELECT videoclip_name");
 
 		for(int i=0;i<que.length();i++){
 			que2[i] = que[i];
@@ -74,49 +78,52 @@ void deleteVideo(MYSQL *connect, char query[]){
 		if(mysql_query(connect, que2) == 0){
 			res = mysql_store_result(connect);
 			num_fields = mysql_num_fields(res);
-			row = mysql_fetch_row(res);
-			video_name = row[0];
-			video_ext = row[1];
+			num_rows = mysql_num_rows(res);
 
-			if(res != NULL)
-			   mysql_free_result(res);
+			for(int i=0;i<num_rows;i++){
+				row = mysql_fetch_row(res);
+				video_name = row[0];
 
-			std::string sql = "UPDATE videoclips SET is_valid = 'N' where videoclip_name = '";
-			sql.append(video_name).append("'");
+				std::string sql = "UPDATE videoclips SET is_valid = 'N' where videoclip_name = '";
+				sql.append(video_name).append("'");
 
-			for(int i=0;i<sql.length();i++){
-				sql2[i] = sql[i];
-			}
-
-			if(mysql_query(connect, sql2) == 0){
-				std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
-				path.append(video_name).append(".").append(video_ext);
-
-				for(int i=0;i<path.length();i++){
-					path2[i] = path[i];
+				for(int i=0;i<sql.length();i++){
+					sql2[i] = sql[i];
 				}
 
-				if(remove(path2)!= 0){
-					perror("Error deleting file");
-				}
-				else{
-					puts("File successfully deleted");
-					if(mysql_query(connect, query) == 0){
+				if(mysql_query(connect, sql2) == 0){
+					std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+					path.append(video_name).append(".").append("avi");
+
+					for(int i=0;i<path.length();i++){
+						path2[i] = path[i];
+					}
+
+					if(remove(path2)!= 0){
+						perror("Error deleting file");
 					}
 					else{
-						printf(mysql_error(connect));
-						printf("\n");
+						cout << video_name << ".avi " << "successfully deleted.\n";
+						if(mysql_query(connect, query) == 0){
+						}
+						else{
+							printf(mysql_error(connect));
+							printf("\n");
+						}
 					}
 				}
-			}
-			else{
-				printf(mysql_error(connect));
-				printf("\n");
+				else{
+					printf(mysql_error(connect));
+					printf("\n");
+				}
 			}
 		}
 		else{
 			printf(mysql_error(connect));
 			printf("\n");
 		}
+
+		if(res != NULL)
+			mysql_free_result(res);
 	}
 }

@@ -30,10 +30,19 @@ void insertVideo(MYSQL *connect){
 		video_ext = row[1];
 		video_path = row[2];
 
+		if(!(video_path.back() == '/')){
+			video_path.append("/");
+		}
+
 		VideoCapture cap(video_path.append(video_name).append(".").append(video_ext)); 
 
 		if(!cap.isOpened()){
-			mysql_query(connect, "DELETE FROM videos WHERE is_valid = 'N'");
+			strcpy(qstring, "DELETE FROM videos WHERE video_name = '");
+			vn = video_name.c_str();
+			strcat(qstring, vn);
+			strcat(qstring, "'");
+
+			mysql_query(connect, qstring);
 		}
 		else{
 			bool stop(false);
@@ -49,12 +58,14 @@ void insertVideo(MYSQL *connect){
 			while(frameCount<=totalFrame)
 			{
 				Mat image;
+
 				cap >> image;
 				video.write(image);
 				frameCount++;
 
 				if((frameCount/totalFrame*100) <= 100){
-					printf("\r%.2f%%", (frameCount/totalFrame*100));
+					printf("\r%.2f%% ", (frameCount/totalFrame*100));
+					cout << "of " << video_name << "." << video_ext << " inserted.";
 				}
 
 				if(kbhit()){
@@ -87,7 +98,7 @@ void insertVideo(MYSQL *connect){
 
 	if(is_cancel == 1){
 		std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
-		path.append(video_name).append(".").append(video_ext);
+		path.append(video_name).append(".").append("avi");
 		char path2[100] = "";
 
 		for(int i=0;i<path.length();i++){
@@ -98,4 +109,7 @@ void insertVideo(MYSQL *connect){
 			perror("Error deleting file");
 		}
 	}
+
+	if(res != NULL)
+		mysql_free_result(res);
 }
