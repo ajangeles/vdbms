@@ -9,6 +9,8 @@
 #include <string.h>
 #include <iostream>
 #include <iomanip>
+#include <vector>
+#include <algorithm>
 
 using namespace cv;
 using namespace std;
@@ -17,7 +19,7 @@ using namespace std;
 #include "detect_face.h"
 #include "play_video.h"
 #include "select_video.h"
-#include "edit_video.h"
+#include "update_video.h"
 #include "delete_video.h"
 
 #define SERVER "localhost"
@@ -56,7 +58,7 @@ int main()
 			detectFaces(connect, query);
 		}
 		else if (strstr(lowQuery, "play")){
-			playVideo(connect, query);
+			playVideo(connect, lowQuery);
 		}
 		else if (strstr(lowQuery, "insert")){
 			if(strstr(lowQuery, "videos")){
@@ -79,7 +81,7 @@ int main()
 			}
 		}
 		else if (strstr(lowQuery, "update")){
-			editVideo(connect, query);
+			updateVideo(connect, query);
 		}
 		else if (strstr(lowQuery, "delete")){
 			deleteVideo(connect, query);
@@ -88,7 +90,9 @@ int main()
 			printf("Invalid query\n");
 		}
 	}
- 
+	
+
+
     mysql_close(connect);   
     return 0;
 }
