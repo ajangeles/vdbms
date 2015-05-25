@@ -105,6 +105,10 @@ void playVideo(MYSQL *connect, char query[]){
 						printf("\n");
 					}
 				}
+				else{
+					printf("Invalid query.\n");
+				}
+
 			}
 		}
 		else if(strstr(query, "videoclips") && strstr(query, "=")){ //check if the user wants to play video in the videoclips table AND this function only accepts the '=' operator

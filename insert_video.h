@@ -71,20 +71,21 @@ void insertVideo(MYSQL *connect){
 		else{
 			bool stop(false);
 
-			int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH); //video width
-			int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT); //video height
+			int frame_width = 480;
+			int frame_height = 272;
 			std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/"; //path of the video directory in the server
 			VideoWriter video(path.append(video_name).append(".avi"),CV_FOURCC('M','J','P','G'),30, Size(frame_width,frame_height),true); //the inserted video will be in avi format.
 
 
 			float frameCount = 0; //used in computing the percentage of insertion of a video
 			float totalFrame = (int) cap.get(CV_CAP_PROP_FRAME_COUNT);
-
 			while(frameCount<totalFrame)
 			{
 				Mat image;
-
+				
 				cap >> image;
+
+				cv::resize(image,image,cv::Size(480,272));
 
 				video.write(image);
 				frameCount++;
@@ -105,7 +106,7 @@ void insertVideo(MYSQL *connect){
 
 			if(is_cancel == 1){ //if the user cancelled the insert operation, delete the not completely inserted/not inserted yet videos in the database
 				mysql_query(connect, "DELETE FROM videos WHERE is_valid = 'N'");
-				cout << "\nOperation cancelled." << endl;
+				cout << "\nCancelled." << endl;
 				break;
 			}
 

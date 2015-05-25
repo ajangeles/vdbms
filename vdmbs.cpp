@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -55,10 +56,13 @@ int main()
 		}
 		
 		if(strstr(lowQuery, "detect")){
-			detectFaces(connect, query);
+			detectFaces(connect, lowQuery);
 		}
 		else if (strstr(lowQuery, "play")){
 			playVideo(connect, lowQuery);
+		}
+		else if(strstr(lowQuery, "clear")){
+			system("cls");
 		}
 		else if (strstr(lowQuery, "insert")){
 			if(strstr(lowQuery, "videos")){
@@ -69,6 +73,9 @@ int main()
 					printf(mysql_error(connect));
 					printf("\n");
 				}
+			}
+			else{
+				printf("Invalid query.\n");
 			}
 		}
 		else if (strstr(lowQuery, "select")){

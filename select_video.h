@@ -24,8 +24,8 @@ void selectVideo(MYSQL *connect, char query[]){
 	int num_rows = mysql_num_rows(res);
 	int videosArray[3]; //store the column names of videos table
 	String videosStrArray[3]; //this is where the value for each column is stored. index 0 = video_id, index 1 = video_name, index 2 = date_added
-	int videoclipsArray[4]; //store the column names of videoclips table
-	String videoclipsStrArray[4]; //this is where the value for each column is stored. index 0 = videoclip_id, index 1 = videoclip_name, index 2 = position, index 3 = date_added
+	int videoclipsArray[5]; //store the column names of videoclips table
+	String videoclipsStrArray[5]; //this is where the value for each column is stored. index 0 = videoclip_id, index 1 = videoclip_name, index 2 = position, index 3 = date_added
 	int count = 0;
 
 	if(strstr(query, "videos")){ //if the user wants to view the data in the videos table
@@ -94,7 +94,13 @@ void selectVideo(MYSQL *connect, char query[]){
 					count++;
 				}
 				else if(temp == "videoclip_name"){
-					printf("|             %-25s   |", field->name);
+					printf("|        %-17s     |", field->name);
+					videoclipsArray[count] = i;
+					videoclipsStrArray[count] = field->name;
+					count++;
+				}
+				else if(temp == "video_id"){
+					printf(" %-5s |", field->name);
 					videoclipsArray[count] = i;
 					videoclipsStrArray[count] = field->name;
 					count++;
@@ -125,7 +131,11 @@ void selectVideo(MYSQL *connect, char query[]){
 							count++;
 						}
 						else if(videoclipsArray[count] == i && videoclipsStrArray[count] == "videoclip_name"){
-							printf("| %-39s |", row[i]);
+							printf("| %-28s |", row[i]);
+							count++;
+						}
+						else if(videoclipsArray[count] == i && videoclipsStrArray[count] == "video_id"){
+							printf("    %-5s |", row[i]);
 							count++;
 						}
 						else if(videoclipsArray[count] == i && videoclipsStrArray[count] == "position"){
