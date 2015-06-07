@@ -156,6 +156,9 @@ void selectVideo(MYSQL *connect, char query[]){
 			printf("Empty set.\n");
 		}	
 	}
+	else{
+		printf("Invalid query.\n");
+	}
 
 	if(res != NULL)
 		mysql_free_result(res);

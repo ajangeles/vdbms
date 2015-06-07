@@ -51,8 +51,8 @@ void updateVideo(MYSQL *connect, char query[]){
 					int result;
 					char tpath[100] = "";
 					char tpath2[100] = "";
-					std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
-					std::string path2 = "C:/Users/Kevin/Documents/Video Database/Videos/";
+					std::string path = "C:/Video Database/Videos/";
+					std::string path2 = "C:/Video Database/Videos/";
 					path.append(old_video_name).append(".avi");
 					path2.append(new_video_name).append(".avi");
 
@@ -108,8 +108,8 @@ void updateVideo(MYSQL *connect, char query[]){
 					int result;
 					char tpath[100] = "";
 					char tpath2[100] = "";
-					std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
-					std::string path2 = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+					std::string path = "C:/Video Database/Video Clips/";
+					std::string path2 = "C:/Video Database/Video Clips/";
 					path.append(old_video_name).append(".avi");
 					path2.append(new_video_name).append(".avi");
 

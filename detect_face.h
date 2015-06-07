@@ -225,7 +225,7 @@ void detectFaces(MYSQL *connect, char query[]){
 								vidCount ++;
 								printf("Detecting %d of %d video(s)...\n", vidCount, num_rows);
 
-								std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+								std::string path = "C:/Video Database/Videos/";
 
 								VideoCapture cap(path.append(video_name).append(".avi")); 
 								if(!cap.isOpened()){
@@ -237,7 +237,7 @@ void detectFaces(MYSQL *connect, char query[]){
 
 									int frame_width = 480;
 									int frame_height = 272;
-									std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+									std::string path = "C:/Video Database/Video Clips/";
 				
 									VideoWriter video;
 									if(std::stoi(detect_count) == 0){ 
@@ -481,14 +481,6 @@ void detectFaces(MYSQL *connect, char query[]){
 											TestStr.append(hour).append(":").append(min).append(":").append(sec);
 											cv::rectangle(image, Point(370,240), Point(475,270), CV_RGB(0,0,0), CV_FILLED);
 											putText(image, TestStr, Point(375,260), CV_FONT_HERSHEY_COMPLEX_SMALL, 1, CV_RGB(255,255,255),1,1); 
-										
-											//line(image,Point(nw_x2,nw_y1),Point(sw_x2,sw_y2),Scalar(0,0,0),2,8);
-											//line(image,Point(cn_x2,cn_y1),Point(cs_x2,cs_y2),Scalar(0,0,0),2,8);
-											//line(image,Point(nw_x1,nw_y2),Point(ne_x2,ne_y2),Scalar(0,0,0),2,8);
-											//line(image,Point(cw_x1,cw_y2),Point(ce_x2,ce_y2),Scalar(0,0,0),2,8);
-
-											//line(image,Point(n_x1,n_y2),Point(s_x2,s_y1),Scalar(0,0,0),2,8);
-											//line(image,Point(e_x1,e_y1),Point(w_x2,w_y2),Scalar(0,0,0),2,8);
 
 											video.write(image);
 											frameCount++;
@@ -513,11 +505,9 @@ void detectFaces(MYSQL *connect, char query[]){
 
 									if(is_frame == 0){ //there is no frame with detected face
 										if(std::stoi(detect_count) == 0){
-											//no_face.push_back(video_name.append(".").append("avi"));
 											video_name.append(".").append("avi");
 										}
 										else{
-											//no_face.push_back(video_name.append("_").append(detect_count).append(".avi"));
 											video_name.append("_").append(detect_count).append(".avi");
 										}
 										is_noface = 1;
@@ -640,7 +630,7 @@ void detectFaces(MYSQL *connect, char query[]){
 
 						if(is_noface == 1){ //delete the video/s in the directory who do not have a frame with detected face
 								//for(int a=0;a<no_face.size();a++){
-									std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+									std::string path = "C:/Video Database/Video Clips/";
 
 									//path.append(no_face[a]);
 									path.append(video_name);
@@ -679,7 +669,7 @@ void detectFaces(MYSQL *connect, char query[]){
 							
 							
 							if(is_cancel == 1){ //delete the videoclip that is not completely detected
-								std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+								std::string path = "C:/Video Database/Video Clips/";
 
 								if(std::stoi(detect_count) == 0){
 									path.append(video_name.append(".").append("avi"));

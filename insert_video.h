@@ -73,7 +73,7 @@ void insertVideo(MYSQL *connect){
 
 			int frame_width = 480;
 			int frame_height = 272;
-			std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/"; //path of the video directory in the server
+			std::string path = "C:/Video Database/Videos/"; //path of the video directory in the server
 			VideoWriter video(path.append(video_name).append(".avi"),CV_FOURCC('M','J','P','G'),30, Size(frame_width,frame_height),true); //the inserted video will be in avi format.
 
 
@@ -125,7 +125,7 @@ void insertVideo(MYSQL *connect){
 	}
 
 	if(is_cancel == 1){ //delete the not completely inserted video in the server
-		std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+		std::string path = "C:/Video Database/Videos/";
 		path.append(video_name).append(".").append("avi");
 		char path2[100] = "";
 

@@ -63,7 +63,7 @@ void playVideo(MYSQL *connect, char query[]){
 							if(res != NULL)
 							   mysql_free_result(res);
 
-							std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+							std::string path = "C:/Video Database/Videos/";
 							VideoCapture cap(path.append(video_name).append(".").append("avi")); //open video
 							if(!cap.isOpened()){
 								cout << "Error opening video stream or file" << endl;
@@ -144,7 +144,7 @@ void playVideo(MYSQL *connect, char query[]){
 							if(res != NULL)
 							   mysql_free_result(res);
 
-							std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+							std::string path = "C:/Video Database/Video Clips/";
 							VideoCapture cap(path.append(videoclip_name).append(".").append("avi")); //open video
 							if(!cap.isOpened()){
 								cout << "Error opening video stream or file" << endl;

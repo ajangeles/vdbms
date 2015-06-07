@@ -40,7 +40,7 @@ void deleteVideo(MYSQL *connect, char query[]){
 						}
 
 						if(mysql_query(connect, sql2) == 0){
-							std::string path = "C:/Users/Kevin/Documents/Video Database/Videos/";
+							std::string path = "C:/Video Database/Videos/";
 							path.append(video_name).append(".").append("avi");
 							char path2[100] = "";
 
@@ -100,7 +100,7 @@ void deleteVideo(MYSQL *connect, char query[]){
 						}
 
 						if(mysql_query(connect, sql2) == 0){
-							std::string path = "C:/Users/Kevin/Documents/Video Database/Video Clips/";
+							std::string path = "C:/Video Database/Video Clips/";
 							path.append(video_name).append(".").append("avi");
 							char path2[100] = "";
 
